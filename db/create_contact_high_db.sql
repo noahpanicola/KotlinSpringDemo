@@ -1,0 +1,60 @@
+DROP DATABASE contact_high;
+CREATE DATABASE contact_high;
+USE contact_high;
+
+CREATE TABLE `ch_user` (
+
+  `ch_user_id`    SERIAL AUTO_INCREMENT,
+  `first_name`    VARCHAR(200) NULL DEFAULT '',
+  `last_name`     VARCHAR(200) NULL DEFAULT '',
+  `email`         VARCHAR(200) NOT NULL UNIQUE,
+  `phone`         VARCHAR(12) NOT NULL UNIQUE,
+  `address`       VARCHAR(100) NULL,
+  `password`      CHAR(128) NULL,
+  `is_active`     TINYINT(4) DEFAULT 1,
+  `image_url`     VARCHAR(1000),
+  `date_created`  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+  PRIMARY KEY (`ch_user_id`)
+);
+
+
+CREATE TABLE `ch_friend_entry` (
+
+	 `ch_friend_entry_id` SERIAL AUTO_INCREMENT,
+	 `requester_user_id` BIGINT UNSIGNED NOT NULL,
+   `receiver_user_id` BIGINT UNSIGNED NOT NULL,
+   `is_active`     TINYINT(4) DEFAULT 1,
+   `is_accepted`     TINYINT(4) DEFAULT 0,
+   `date_created`  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+   FOREIGN KEY (`requester_user_id`) REFERENCES `ch_user`(`ch_user_id`),
+   FOREIGN KEY (`receiver_user_id`) REFERENCES `ch_user`(`ch_user_id`),
+	 PRIMARY KEY (`ch_friend_entry_id`)
+);
+
+/*
+  --------------------------------------------------------------------------------------------
+  SETUP THE SPRING SESSION TABLES
+  --------------------------------------------------------------------------------------------
+*/
+/*CREATE TABLE SPRING_SESSION (
+   SESSION_ID CHAR(36),
+   CREATION_TIME BIGINT NOT NULL,
+   LAST_ACCESS_TIME BIGINT NOT NULL,
+   MAX_INACTIVE_INTERVAL INT NOT NULL,
+   PRINCIPAL_NAME VARCHAR(100),
+   CONSTRAINT SPRING_SESSION_PK PRIMARY KEY (SESSION_ID)
+ );
+
+ CREATE INDEX SPRING_SESSION_IX1 ON SPRING_SESSION (LAST_ACCESS_TIME);
+
+ CREATE TABLE SPRING_SESSION_ATTRIBUTES (
+  SESSION_ID CHAR(36),
+  ATTRIBUTE_NAME VARCHAR(200),
+  ATTRIBUTE_BYTES VARBINARY(100000),
+  CONSTRAINT SPRING_SESSION_ATTRIBUTES_PK PRIMARY KEY (SESSION_ID, ATTRIBUTE_NAME),
+  CONSTRAINT SPRING_SESSION_ATTRIBUTES_FK FOREIGN KEY (SESSION_ID) REFERENCES SPRING_SESSION(SESSION_ID) ON DELETE CASCADE
+ );
+
+ CREATE INDEX SPRING_SESSION_ATTRIBUTES_IX1 ON SPRING_SESSION_ATTRIBUTES (SESSION_ID);*/
